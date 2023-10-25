@@ -49,7 +49,8 @@ JSON
 
 ```
 docker ps
-docker exec -it ch1-nginx-1 cat /etc/nginx/nginx.conf
-docker exec -it ch1-nginx-1 cat /etc/nginx/nginx.conf > origImageConfig.conf
-docker cp chapter1-nginx-1: /etc/nginx/nginx.conf nginx.conf
+docker exec -it chapter1-nginx-1 cat /etc/nginx/nginx.conf
+docker exec -it chapter1-nginx-1 cat /etc/nginx/nginx.conf > origImageConfig.conf
+docker cp chapter1-nginx-1:/etc/nginx/nginx.conf nginx.conf
 ```
+
