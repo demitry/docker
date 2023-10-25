@@ -54,3 +54,29 @@ docker exec -it chapter1-nginx-1 cat /etc/nginx/nginx.conf > origImageConfig.con
 docker cp chapter1-nginx-1:/etc/nginx/nginx.conf nginx.conf
 ```
 
+Dockerfile
+```
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf 
+```
+
+Build image
+
+```
+docker build -t custom-nginx:0.1 .
+```
+
+Use image
+
+```
+services:
+  nginx:
+    image: custom-nginx:0.1
+    ports:
+      - 8080:80
+    volumes:
+    - ./static-site:/usr/share/nginx/html
+```
+
+docker-compose up
