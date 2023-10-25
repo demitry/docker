@@ -1,3 +1,25 @@
+<!-- TOC -->
+
+- [Essential Docker for ASP.NET Core MVC](#essential-docker-for-aspnet-core-mvc)
+    - [Chapter 1](#chapter-1)
+        - [Working with Images](#working-with-images)
+        - [Docker Images for ASP.NET Core MVC Projects](#docker-images-for-aspnet-core-mvc-projects)
+        - [Dockerfile Commands](#dockerfile-commands)
+        - [Docker Containers Quick Reference](#docker-containers-quick-reference)
+        - [Arguments for create/run commands](#arguments-for-createrun-commands)
+        - [Essential Commands for Working with Containers](#essential-commands-for-working-with-containers)
+        - [Volumes](#volumes)
+        - [Docker Software-Defined Networks Quick Reference](#docker-software-defined-networks-quick-reference)
+        - [Commands for Working with Software-Defined Networks](#commands-for-working-with-software-defined-networks)
+        - [Docker Compose Quick Reference](#docker-compose-quick-reference)
+        - [Essential Configuration Keywords Used in Compose Files](#essential-configuration-keywords-used-in-compose-files)
+        - [Essential Commands for Docker Compose](#essential-commands-for-docker-compose)
+        - [Docker Swarm Quick Reference](#docker-swarm-quick-reference)
+        - [The Docker Compose Keywords for Swarms](#the-docker-compose-keywords-for-swarms)
+        - [Commands for Docker Swarms](#commands-for-docker-swarms)
+
+<!-- /TOC -->
+
 #docker 
 # Essential Docker for ASP.NET Core MVC
 by [Adam Freeman](https://www.amazon.com/Adam-Freeman/e/B001IU0SNK/ref=dp_byline_cont_book_1) (Author)
@@ -5,7 +27,8 @@ by [Adam Freeman](https://www.amazon.com/Adam-Freeman/e/B001IU0SNK/ref=dp_bylin
  - create a development platform for ASP.NET Core MVC
 - Use Docker to test, deploy and manage ASP.NET Core MVC containers 
 - Use Docker Swarms to scale up applications to cope with large workloads
-## Ch 1
+
+## Chapter 1
 
 Containers work best for MVC applications that are  stateless, such that a series of HTTP requests from a single client can be handled by more than one instance  of the application, running in different containers. 
 This doesn’t mean the MVC application cannot have any  state data, 
@@ -181,7 +204,7 @@ docker network rm
 ### Docker Compose Quick Reference
 Docker Compose is used to describe complex applications that require multiple containers, volumes,  and software-defined networks. The description of the application is written in a compose file, using the  YAML format. Docker Compose and compose files are described in Chapter 6
 
-#### Essential Configuration Keywords Used in Compose Files
+### Essential Configuration Keywords Used in Compose Files
 version 
 - specifies the version of the compose file schema. At the time of writing the latest version is version 3.
 volume
@@ -235,3 +258,85 @@ docker-compose scale
 
 docker-compose ps
 - lists the containers that have been created for the services defined in the compose file.
+
+
+### Docker Swarm Quick Reference
+
+A Docker swarm is a cluster of servers that run containers.
+
+There are worker nodes that run the containers and manager nodes that determine which containers run on individual nodes and ensure that the right number of containers are running for each service.
+
+Swarms automatically try to recover when containers or nodes fail.
+
+A swarm is created by running the following command on a manager node:
+
+```
+docker swarm init
+```
+
+The output from this command includes instructions for setting up the worker nodes, which are
+configured using the docker swarm join command.
+
+```
+...
+deploy:
+	replicas: 1
+	placement:
+		constraints:
+		- node.hostname == dbhost
+...
+```
+
+### The Docker Compose Keywords for Swarms
+
+```
+replicas  	- specifies how many instances of a container are required for a service.
+placement 	- section configures the placement of the containers for the service.
+constraints - specifies the constraints for locating the containers in the swarm.
+```
+
+Applications that are described using a compose file are deployed using the docker stack deploy command, like this:
+
+```
+docker stack deploy --compose-file docker-compose-swarm.yml exampleapp
+```
+
+The final argument to this command is used as a prefix applied to the names of the containers, networks, and volumes that are created in the swarm.
+
+### Commands for Docker Swarms
+
+docker swarm init 
+- runs on manager nodes to create a swarm.
+
+docker swarm join 
+- runs on worker nodes to join a swarm.
+
+docker node ls 
+- displays a list of the nodes in the swarm.
+
+docker node update 
+- changes the configuration of a node in the swarm.
+
+docker service create 
+- manually starts a new service on the swarm.
+
+docker service update 
+- changes the configuration of a service running on the swarm.
+
+docker service scale 
+- changes the number of containers that are running for a specific service.
+
+docker service ls 
+- lists the services that are running on the swarm.
+
+docker service ps 
+- lists the containers that are running for a specific service.
+
+docker service rm 
+- removes a service from the swarm.
+
+docker stack deploy 
+- deploys an application described in a compose file to the swarm.
+
+docker stack rm 
+- removes the services described in a compose file from the swarm.
